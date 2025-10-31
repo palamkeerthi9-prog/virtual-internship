@@ -1,0 +1,30 @@
+# =========================
+# Task 3 – TF-IDF Feature Size Experiment
+# =========================
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# --- Load and prepare dataset ---
+df = pd.read_csv("fake_job_postings.csv")
+df = df.dropna(subset=['description'])
+
+X = df['description']
+y = df['fraudulent']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# --- Test different TF-IDF feature limits ---
+for max_f in [1000, 5000, 10000]:
+    tfidf = TfidfVectorizer(stop_words='english', max_features=max_f)
+    X_train_tfidf = tfidf.fit_transform(X_train)
+    X_test_tfidf = tfidf.transform(X_test)
+
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_train_tfidf, y_train)
+    y_pred = model.predict(X_test_tfidf)
+
+    acc = accuracy_score(y_test, y_pred)
+    print(f"Max Features: {max_f:<6} → Accuracy: {acc:.4f}")

@@ -1,0 +1,40 @@
+# =========================
+# Task 2 – Model Analysis (Standalone Script)
+# =========================
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+
+# --- Load dataset ---
+df = pd.read_csv("fake_job_postings.csv")
+df = df.dropna(subset=['description'])
+
+# --- Prepare data ---
+X = df['description']
+y = df['fraudulent']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# --- Recreate TF-IDF model (same as Task 1) ---
+tfidf = TfidfVectorizer(stop_words='english', max_features=5000)
+X_train_tfidf = tfidf.fit_transform(X_train)
+X_test_tfidf = tfidf.transform(X_test)
+
+model_tfidf = LogisticRegression(max_iter=1000)
+model_tfidf.fit(X_train_tfidf, y_train)
+
+# --- Predict probabilities ---
+probs = model_tfidf.predict_proba(X_test_tfidf)[:, 1]
+
+# --- Create analysis DataFrame ---
+results_df = pd.DataFrame({
+    'description': X_test,
+    'actual': y_test,
+    'predicted_proba': probs
+})
+
+# --- Sort and show top 5 most suspicious job posts ---
+top_fakes = results_df.sort_values(by='predicted_proba', ascending=False).head(5)
+pd.set_option('display.max_colwidth', 300)
+print(top_fakes[['predicted_proba', 'actual', 'description']])
