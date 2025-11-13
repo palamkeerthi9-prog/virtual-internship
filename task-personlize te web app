@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fake Job Detection</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #004aad;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        form {
+            background: white;
+            width: 50%;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        button {
+            background-color: #004aad;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0073ff;
+        }
+
+        .tips {
+            width: 60%;
+            margin: 20px auto;
+            background: #e8f0fe;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .tips h2 {
+            color: #004aad;
+        }
+
+        footer {
+            background: #004aad;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 20px 20px 0 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Fake Job Detection Web App</h1>
+
+    <form action="/predict" method="POST">
+        <label for="jobdesc"><b>Enter Job Description:</b></label><br><br>
+        <textarea name="jobdesc" required></textarea><br><br>
+        <button type="submit">Check Authenticity</button>
+    </form>
+
+    <div class="tips">
+        <h2>Tips to Avoid Fake Jobs</h2>
+        <ul>
+            <li>Beware of jobs asking for upfront payments.</li>
+            <li>Check company website and reviews before applying.</li>
+            <li>Be cautious of unrealistic salary offers.</li>
+            <li>Use verified job portals.</li>
+            <li>Never share personal or banking details with unknown recruiters.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>Developed by <b>Your Name / Team Name</b> | Project: <b>Fake Job Detection System</b></p>
+    </footer>
+
+</body>
+</html>
