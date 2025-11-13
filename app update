@@ -1,0 +1,24 @@
+from flask import Flask, render_template, request
+import random  # for demo; replace with your ML model prediction
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    job_desc = request.form['jobdesc']
+
+    # --- Replace this with your actual model prediction ---
+    prediction = random.choice(['Fake Job', 'Real Job'])
+    confidence = round(random.uniform(50, 100), 2)
+    # -------------------------------------------------------
+
+    return render_template('result.html',
+                           prediction=prediction,
+                           confidence=confidence)
+
+if __name__ == '__main__':
+    app.run(debug=True)
