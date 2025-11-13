@@ -1,24 +1,40 @@
-from flask import Flask, render_template, request
-import random  # for demo; replace with your ML model prediction
+from flask import Flask, render_template, request, redirect, url_for, session
+import random
+import re
 
 app = Flask(__name__)
+app.secret_key = "securekey"  # Required for session
 
 @app.route('/')
-def home():
-    return render_template('index.html')
+def index():
+    # Pass last prediction from session (if available)
+    last_prediction = session.get('last_prediction', None)
+    last_confidence = session.get('last_confidence', None)
+    return render_template('index.html',
+                           last_prediction=last_prediction,
+                           last_confidence=last_confidence)
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    job_desc = request.form['jobdesc']
+    job_desc = request.form.get('jobdesc', '').strip()
 
-    # --- Replace this with your actual model prediction ---
+    # --- Error Handling ---
+    if not job_desc:
+        return render_template('index.html', error="Job description cannot be empty!")
+    if not re.search('[a-zA-Z]', job_desc):  # No letters → invalid
+        return render_template('index.html', error="Please enter a valid job description (not only numbers/symbols).")
+
+    # --- Fake Model Logic (Replace with your ML model) ---
     prediction = random.choice(['Fake Job', 'Real Job'])
-    confidence = round(random.uniform(50, 100), 2)
-    # -------------------------------------------------------
+    confidence = round(random.uniform(60, 99), 2)
+
+    # Save to session for "Last Prediction"
+    session['last_prediction'] = prediction
+    session['last_confidence'] = confidence
 
     return render_template('result.html',
                            prediction=prediction,
                            confidence=confidence)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
