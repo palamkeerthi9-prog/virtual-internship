@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fake Job Detection</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            background-color: #004aad;
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+        }
+        form {
+            background: white;
+            width: 50%;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 140px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #004aad;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0073ff;
+        }
+        .tips {
+            width: 60%;
+            margin: 20px auto;
+            background: #eaf2ff;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .real { background: #28a745; }
+        .fake { background: #dc3545; }
+        .error {
+            width: 50%;
+            margin: 20px auto;
+            background-color: #ffdddd;
+            border: 1px solid #ff5c5c;
+            color: #a30000;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        footer {
+            background: #004aad;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 20px 20px 0 0;
+            margin-top: 30px;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            const error = "{{ error|default('') }}";
+            if (error) {
+                alert(error);
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h1>Fake Job Detection Web App</h1>
+
+    <form action="/predict" method="POST">
+        <label><b>Enter Job Description:</b></label><br><br>
+        <textarea name="jobdesc" required></textarea><br><br>
+        <button type="submit">Check Authenticity</button>
+    </form>
+
+    {% if last_prediction %}
+    <div class="tips">
+        <h2>Last Prediction Result:</h2>
+        <p>
+            <b>Status:</b> 
+            <span class="badge {% if last_prediction == 'Real Job' %}real{% else %}fake{% endif %}">
+                {{ last_prediction }}
+            </span><br>
+            <b>Confidence:</b> {{ last_confidence }}%
+        </p>
+    </div>
+    {% endif %}
+
+    <div class="tips">
+        <h2>Tips to Identify Fake Jobs</h2>
+        <ul>
+            <li>Be cautious of jobs offering unrealistic pay.</li>
+            <li>Never share personal/bank details over email.</li>
+            <li>Check company website before applying.</li>
+            <li>Jobs asking for payment are usually scams.</li>
+            <li>Watch for unprofessional email domains.</li>
+        </ul>
+    </div>
+
+    <footer>
+        Developed by <b>Your Name / Team Name</b> | Project: <b>Fake Job Detection System</b>
+    </footer>
+
+</body>
+</html>
